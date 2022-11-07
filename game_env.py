@@ -20,16 +20,18 @@ class MastermindEnv(Env):
         self.game_rule = '''
   MASTERMIND
 
-  [OBJECTIVE] You must break the secret code in the fewest number of guesses.
+  [OBJECTIVE] You must crack the secret code in the fewest number of guesses.
 
     Rule#1: There are 8 turns in total. You must guess it correctly within 8 guesses.
-    Rule#2: There are in total 6 numbers (1-6). You have to make a repeatable pattern
-            of 4 digits out of the 6 numbers.
-    Rule#3: After each guess, the key plug will show how many #red and #white:
-      - Red: Correct number and position
-      - White: Correct number but not in the correct location.
+    Rule#2: There are in total 6 numbers (1-6). It can be a repeatable pattern of
+            4 digits out of the 6 numbers.
+    Rule#3: After each guess, the terminal will show how many #red and #white you got:
+              - Red: Correct number and position
+              - White: Correct number but not in the correct location.
+    Rule#4: You modify your answer accordingly after each round and try
+            to make a right guess of the code.
 
-  Enjoy! :)
+    Enjoy! :)
                     '''
         self.display = display
 
