@@ -19,7 +19,8 @@ if __name__ == "__main__":
                 pass
                 
         observation, reward, done, info = env.step(action)
-        print('\n# 1  2  3  4  R  W #\n')
-        print(observation)
-        if done:
+        if not done:
+            print('\n# 1  2  3  4  R  W #\n')
+            print(observation)
+        else:
             observation = env.reset()
