@@ -14,14 +14,11 @@ OBJECTIVE: You must crack the secret code in the fewest number of guesses.
 
 4. You modify your answer accordingly after each round and try to make a right guess of the code.
 
-### Manual Version
+### How to train/test or play manually?
 <p align="center">
  <img src="https://user-images.githubusercontent.com/69416199/200323320-f6bf71a5-d5ab-4f9e-b123-c2633002c232.png" height="400"/>
 </p>
 
-1. Run `python play_game.py`
+1. Run `python main.py [--play] [--train] [--test] [--model MODEL.zip]`
 
 2. Enjoy :)
-
-### Gym Version
-1. TBC!

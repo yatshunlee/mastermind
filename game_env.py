@@ -69,7 +69,7 @@ class MastermindEnv(Env):
         # Either guess correctly or time's up
         self.done = self.game_end(rw_scores[0], self.num_of_turns)
         # init reward function (can customize)
-        reward = 1 if self.done else 0
+        reward = 1 if rw_scores[0]==self.num_actions else 0
         # to make it a box with (8, 6) shape
         states = np.c_[self.board, self.score]
         return states, reward, self.done, {}
