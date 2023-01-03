@@ -2,6 +2,7 @@ import argparse
 import numpy as np
 from time import sleep
 from game_env import MastermindEnv
+from stable_baselines3 import A2C, PPO
 
 def play_game():
     env = MastermindEnv(display=True)
@@ -27,21 +28,23 @@ def play_game():
         else:
             observation = env.reset()
 
-def train():
+def train(total_timesteps=100000, name='MODEL'):
     env = MastermindEnv()
 
-    model = None
-    model.learn()
+    model = A2C("MlpPolicy", env, verbose=1)
+    model.learn(total_timesteps=total_timesteps)
     model.save(name)
     
-    print('The trained model is saved as ./models/model.zip')
+    print('The trained model is saved as MODEL.zip')
 
-def test(model, name='model'):
+def test(model, name='MODEL'):
+    model = A2C.load(model)
+
     env = MastermindEnv(display=True)
     observation = env.reset()
 
     while True:
-        action, _ = model.predict(obs, deterministic=True)
+        action, _ = model.predict(observation, deterministic=True)
         observation, reward, done, info = env.step(action)
         sleep(0.2)
         if not done:
@@ -69,6 +72,6 @@ if __name__ == "__main__":
         if model:
             test(model)
         else:
-            print('Usage: python main.py --test [--weight WEIGHTS.ZIP]. You have to include the model.zip to load model.')
+            print('Usage: python main.py --test [--model MODEL].')
     else:
-        print('Usage: python main.py [--play] [--train] [--test] [--weight WEIGHTS.ZIP]')
+        print('Usage: python main.py [--play] [--train] [--test] [--model MODEL]')

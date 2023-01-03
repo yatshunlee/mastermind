@@ -19,6 +19,6 @@ OBJECTIVE: You must crack the secret code in the fewest number of guesses.
  <img src="https://user-images.githubusercontent.com/69416199/200323320-f6bf71a5-d5ab-4f9e-b123-c2633002c232.png" height="400"/>
 </p>
 
-1. Run `python main.py [--play] [--train] [--test] [--model MODEL.zip]`
+1. Run `python main.py [--play] [--train] [--test] [--model MODEL]`
 
 2. Enjoy :)
