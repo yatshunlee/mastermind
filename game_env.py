@@ -16,6 +16,8 @@ class MastermindEnv(Env):
         # self.observation_space = spaces.Box(low=0, high=6, shape=(1, 7), dtype=np.uint8)
         # self.observation_space = spaces.Box(low=0, high=6, shape=(8, 6), dtype=np.uint8)
         self.action_space = spaces.MultiDiscrete([6, 6, 6, 6])
+        
+        self.guessed = []
 
         self.num_actions = num_actions
         self.num_turns = num_turns
@@ -51,6 +53,8 @@ class MastermindEnv(Env):
         self.end = np.zeros((self.num_turns, 1))
         # gameover
         self.done = False
+        
+        self.guessed = []
 
         # print game rule
         if self.display:
@@ -79,7 +83,12 @@ class MastermindEnv(Env):
         # update end obs
         self.end[self.num_of_turns - 1, :] = 1.0 if self.done else 0.0
         # init reward function (can customize)
-        reward = 1 if rw_scores[0]==self.num_actions else 0
+        # reward = 1 if rw_scores[0]==self.num_actions else 0
+        if tuple(action) in self.guessed:
+            reward = 0
+        else:
+            reward = rw_scores[0]
+            self.guessed.append(tuple(action))
         # to make it a box with (8, 6) shape
         states = np.c_[self.board, self.score, self.end]
         

@@ -29,10 +29,12 @@ def play_game():
         else:
             observation = env.reset()
 
-def train(total_timesteps=50000, name='MODEL'):
+def train(total_timesteps=40000, name='MODEL'):
     env = MastermindEnv(num_turns=64)
-
-    model = RecurrentPPO("MlpLstmPolicy", env, verbose=1)
+    
+    policy_kwargs = {'net_arch':[7, 7, 7, 7, 7]}
+                     
+    model = RecurrentPPO("MlpLstmPolicy", env, policy_kwargs=policy_kwargs, verbose=1)
     model.learn(total_timesteps=total_timesteps)
     model.save(name)
     
@@ -45,7 +47,7 @@ def test(model, name='MODEL'):
     observation = env.reset()
 
     while True:
-        action, _ = model.predict(observation, deterministic=True)
+        action, _ = model.predict(observation) # , deterministic=True)
         observation, reward, done, info = env.step(action)
         sleep(0.2)
         if not done:
