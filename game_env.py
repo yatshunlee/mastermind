@@ -3,7 +3,7 @@ from time import sleep
 from gym import Env, spaces
 
 class MastermindEnv(Env):
-    def __init__(self, display=False, num_actions=4, num_turns=8):
+    def __init__(self, display=False, num_actions=4, num_turns=8, num_obs=7):
         """
         :param: render_rule: to show rule when playing manually
         :built-in parameters: self.observation_space:
@@ -12,7 +12,9 @@ class MastermindEnv(Env):
         :built-in parameters: self.render_rule:
         """
         # super(MastermindEnv).__init()
-        self.observation_space = spaces.Box(low=0, high=6, shape=(8, 6), dtype=np.uint8)
+        self.observation_space = spaces.Box(low=0, high=6, shape=(1, 7), dtype=np.uint8)
+        # self.observation_space = spaces.Box(low=0, high=6, shape=(1, 7), dtype=np.uint8)
+        # self.observation_space = spaces.Box(low=0, high=6, shape=(8, 6), dtype=np.uint8)
         self.action_space = spaces.MultiDiscrete([6, 6, 6, 6])
 
         self.num_actions = num_actions
@@ -45,6 +47,8 @@ class MastermindEnv(Env):
         self.board = np.zeros((self.num_turns, self.num_actions))
         # score state
         self.score = np.zeros((self.num_turns, 2))
+        # end state
+        self.end = np.zeros((self.num_turns, 1))
         # gameover
         self.done = False
 
@@ -53,7 +57,11 @@ class MastermindEnv(Env):
             print(self.game_rule)
 
         # to make it a box with (8, 6) shape
-        states = np.c_[self.board, self.score]
+        states = np.c_[self.board, self.score, self.end]
+        
+        states = states[self.num_of_turns, :]
+        states = states.reshape((1, 7))
+        
         return states
 
     def step(self, action):
@@ -68,10 +76,16 @@ class MastermindEnv(Env):
         self.num_of_turns += 1
         # Either guess correctly or time's up
         self.done = self.game_end(rw_scores[0], self.num_of_turns)
+        # update end obs
+        self.end[self.num_of_turns - 1, :] = 1.0 if self.done else 0.0
         # init reward function (can customize)
         reward = 1 if rw_scores[0]==self.num_actions else 0
         # to make it a box with (8, 6) shape
-        states = np.c_[self.board, self.score]
+        states = np.c_[self.board, self.score, self.end]
+        
+        states = states[self.num_of_turns - 1, :]
+        states = states.reshape((1, 7))
+        
         return states, reward, self.done, {}
 
     def render(self):

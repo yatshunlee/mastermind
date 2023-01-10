@@ -2,7 +2,8 @@ import argparse
 import numpy as np
 from time import sleep
 from game_env import MastermindEnv
-from stable_baselines3 import A2C, PPO
+# from stable_baselines3 import A2C, PPO
+from sb3_contrib import RecurrentPPO
 
 def play_game():
     env = MastermindEnv(display=True)
@@ -28,17 +29,17 @@ def play_game():
         else:
             observation = env.reset()
 
-def train(total_timesteps=100000, name='MODEL'):
-    env = MastermindEnv()
+def train(total_timesteps=50000, name='MODEL'):
+    env = MastermindEnv(num_turns=64)
 
-    model = A2C("MlpPolicy", env, verbose=1)
+    model = RecurrentPPO("MlpLstmPolicy", env, verbose=1)
     model.learn(total_timesteps=total_timesteps)
     model.save(name)
     
     print('The trained model is saved as MODEL.zip')
 
 def test(model, name='MODEL'):
-    model = A2C.load(model)
+    model = RecurrentPPO.load(model)
 
     env = MastermindEnv(display=True)
     observation = env.reset()
